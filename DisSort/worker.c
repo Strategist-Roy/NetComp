@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	client_info.ai_socktype=SOCK_STREAM;
 
 	//CONNECT CLIENT TO SERVER
-	initWorker(&sockfd,argv[1],&client_info,&client_pointer);
+	initWorker(&sockfd,argv[2],&client_info,&client_pointer,argv[1]);
 
 	int num;
 	while (read(sockfd,&num,sizeof(num)) && num != -1) {

@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 	memset(&server_info,0,sizeof(server_info));
 	server_info.ai_family=AF_UNSPEC;
 	server_info.ai_socktype=SOCK_STREAM;
+	server_info.ai_flags=AI_PASSIVE;     //Assign the network IP 
 
 	//SERVER SETUP AND LISTENING
 	initServer(&sockfd,argv[1],&server_info,&server_pointer,BACKLOG);
@@ -39,6 +40,10 @@ int main(int argc, char *argv[])
 	for (i=0;i<NUM_WORKERS;i++) {
 		workers[i].sockfd=accept(sockfd,(struct sockaddr *)&(workers[i].client_info),&(workers[i].client_size));
 	}
+
+
+	//THE WHOLE OPERATION STARTS FROM HERE
+	clock_t begin=clock();
 
 	fInput=fopen(argv[2],"r");
 	fOutput=fopen(argv[3],"w");
@@ -60,6 +65,8 @@ int main(int argc, char *argv[])
 	while ((index=findMin()) != -1) {
 		read(workers[index].sockfd,&response[index],sizeof(response[index]));
 	}
-	
+
+	clock_t end=clock();
+	printf ("Time Spent in DisSort is:- %lf\n", ((double)(end-begin)/CLOCKS_PER_SEC));
 	return 0;
 }

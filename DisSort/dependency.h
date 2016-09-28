@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <netdb.h>
 #include <string.h>
+#include <time.h>
 #include <limits.h>
 
 typedef struct client
@@ -15,7 +16,7 @@ typedef struct client
 
 void initServer(int *sockfd, char *port, struct addrinfo *server_info, struct addrinfo **server_pointer, int backlog)
 {
-	if (!getaddrinfo("localhost",port,server_info,server_pointer)) {
+	if (!getaddrinfo(NULL,port,server_info,server_pointer)) {
 		struct addrinfo *traverse=*server_pointer;
 		while (traverse) {
 			if ((*sockfd=socket(traverse->ai_family, traverse->ai_socktype, traverse->ai_protocol)) != -1) {
@@ -31,9 +32,9 @@ void initServer(int *sockfd, char *port, struct addrinfo *server_info, struct ad
 	}
 }
 
-void initWorker(int *sockfd, char *port, struct addrinfo *client_info, struct addrinfo **client_pointer)
+void initWorker(int *sockfd, char *port, struct addrinfo *client_info, struct addrinfo **client_pointer, char *ip_address)
 {
-	if (!getaddrinfo("localhost",port,client_info,client_pointer)) {
+	if (!getaddrinfo(ip_address,port,client_info,client_pointer)) {
 		struct addrinfo *traverse=*client_pointer;
 		while (traverse) {
 			if ((*sockfd=socket(traverse->ai_family, traverse->ai_socktype, traverse->ai_protocol)) != -1) {
